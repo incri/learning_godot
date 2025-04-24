@@ -1,0 +1,29 @@
+[gd_scene load_steps=5 format=3 uid="uid://bdv1vc1vfu8fr"]
+
+[ext_resource type="Script" uid="uid://bqedlp3j8kfnk" path="res://scripts/player_camera.gd" id="1_3vyb7"]
+[ext_resource type="Script" uid="uid://iu2y1kglrb5l" path="res://scripts/player_movements.gd" id="1_g2els"]
+[ext_resource type="PackedScene" uid="uid://7s3om07slv3c" path="res://assets/players/Astrael.glb" id="3_qhqgy"]
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_3vyb7"]
+radius = 0.342264
+height = 1.68235
+
+[node name="Player" type="RigidBody3D"]
+script = ExtResource("1_g2els")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0770233, 0.936671, 0.26103)
+shape = SubResource("CapsuleShape3D_3vyb7")
+
+[node name="SpringArm3D" type="SpringArm3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.0214515, 1.36816, -0.0616054)
+spring_length = 7.0
+margin = 0.2
+script = ExtResource("1_3vyb7")
+
+[node name="Camera3D" type="Camera3D" parent="SpringArm3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 2.30349)
+current = true
+
+[node name="Astrael" parent="." instance=ExtResource("3_qhqgy")]
+transform = Transform3D(-0.952276, 0.00256463, -0.305227, 0.00288485, 0.999996, -0.000598055, 0.305225, -0.00145006, -0.952279, 0.135159, 0.170414, 0.500612)
