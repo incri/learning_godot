@@ -5,11 +5,18 @@ extends CharacterBody3D
 @export var gravity: float = 30.0
 @export var jump_speed: float = 12.0
 @export var sprint_speed: float = 14.0
+@export var dash_speed: float = 20.0
+@export var dash_duration: float = 0.2
+@export var dash_cooldown_time: float = 1.0
 
 var astrael: Node3D
 var camera: Camera3D
 var orientation = Transform3D()
 var can_double_jump: bool = false
+var dash_timer: float = 0.0
+var dash_cooldown_timer: float = 0.0
+var is_dashing: bool = false
+var has_air_dashed: bool = false
 
 
 func _ready():
@@ -29,34 +36,52 @@ func _physics_process(delta):
 
 	var move_dir = Vector3.ZERO
 	var current_speed = run_speed
+	if Input.is_action_pressed("sprint"):
+		current_speed = sprint_speed
+
 	if input_dir != Vector2.ZERO:
 		input_dir = input_dir.normalized()
-		# Update orientation to match camera's Y rotation only
 		var cam_rot = camera.global_transform.basis.get_euler()
 		orientation.basis = Basis(Vector3.UP, cam_rot.y)
-		
-		# Transform input direction to world space using orientation
 		move_dir = orientation.basis.x * input_dir.x + orientation.basis.z * input_dir.y
 		move_dir = move_dir.normalized()
 
-		velocity.x = move_dir.x * current_speed
-		velocity.z = move_dir.z * current_speed
+		if Input.is_action_just_pressed("dash") and dash_cooldown_timer <= 0:
+			if is_on_floor():
+				is_dashing = true
+				dash_timer = dash_duration
+				dash_cooldown_timer = dash_cooldown_time
+				has_air_dashed = false
+			elif not is_on_floor() and not has_air_dashed:
+				is_dashing = true
+				dash_timer = dash_duration
+				has_air_dashed = true
+				dash_cooldown_timer = dash_cooldown_time
+
+		if is_dashing:
+			velocity = move_dir * dash_speed
+			velocity.y = 0
+			dash_timer -= delta
+			if dash_timer <= 0:
+				is_dashing = false
+		else:
+			velocity.x = move_dir.x * current_speed
+			velocity.z = move_dir.z * current_speed
 
 		if move_dir.length() > 0.01:
-			# Use Transform3D.looking_at to orient Astrael
 			astrael.transform = astrael.transform.looking_at(astrael.transform.origin + move_dir, Vector3.UP)
 	else:
-		velocity.x = move_toward(velocity.x, 0, run_speed)
-		velocity.z = move_toward(velocity.z, 0, run_speed)
+		velocity.x = move_toward(velocity.x, 0, current_speed)
+		velocity.z = move_toward(velocity.z, 0, current_speed)
 
-	# Apply gravity
-	if not is_on_floor():
+	if dash_cooldown_timer > 0:
+		dash_cooldown_timer -= delta
+
+	if not is_dashing and not is_on_floor():
 		velocity.y -= gravity * delta
 	else:
 		velocity.y = 0
-		can_double_jump = true # Reset double jump when on floor
 
-	# Handle jumping
 	if Input.is_action_just_pressed("jump"):
 		if is_on_floor():
 			velocity.y = jump_speed
