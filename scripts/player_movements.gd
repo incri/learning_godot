@@ -60,9 +60,9 @@ func _physics_process(delta):
 	if Input.is_action_just_pressed("jump"):
 		if is_on_floor():
 			velocity.y = jump_speed
-			can_double_jump = true
+			can_double_jump = true  
 		elif can_double_jump:
 			velocity.y = jump_speed
-			can_double_jump = false
+			can_double_jump = false  
 
 	move_and_slide()
