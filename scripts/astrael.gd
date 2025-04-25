@@ -23,7 +23,10 @@ func _process(_delta: float) -> void:
 	if is_jumping:
 		animation_player.play("Player/jump")
 	elif is_moving:
-		animation_player.play("Player/run")
+		if Input.is_action_pressed("sprint"):
+			animation_player.play("Player/run")
+		else:
+			animation_player.play("Player/walk")
 	else:
 		animation_player.play("Player/ideal")
 
