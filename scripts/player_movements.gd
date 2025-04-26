@@ -17,13 +17,18 @@ var dash_timer: float = 0.0
 var dash_cooldown_timer: float = 0.0
 var is_dashing: bool = false
 var has_air_dashed: bool = false
-
+var intro_timer: float = 12.0  
 
 func _ready():
 	astrael = $Astrael
 	camera = $CameraPivot/SpringArm3D/Camera3D
 
 func _physics_process(delta):
+	intro_timer -= delta  
+	if intro_timer > 0:
+		velocity = Vector3.ZERO 
+		return  
+	
 	var input_dir = Vector2.ZERO
 	if Input.is_action_pressed("move_forward"):
 		input_dir.y -= 1
