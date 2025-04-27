@@ -36,14 +36,11 @@ func _process(_delta: float) -> void:
 			locojump_blend = 1.0
 			if target_blend > 0.6 or target_blend < -0.6:
 				jumpmotion_blend = 1.0
-				jump_timer = 0.5
 			else:
 				jumpmotion_blend = 0.0
 			animationTree.set(locojumpBlendPath, locojump_blend)
 			animationTree.set(jumpmotionBlendPath, jumpmotion_blend)
-		if jump_timer > 0:
-			jump_timer -= _delta
-		else:
+		if player_movements.is_on_floor():
 			if locojump_blend > 0:
 				locojump_blend = lerp(locojump_blend, 0.0, blend_speed * _delta)
 				animationTree.set(locojumpBlendPath, locojump_blend)
