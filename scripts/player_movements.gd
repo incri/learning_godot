@@ -17,20 +17,20 @@ var dash_timer: float = 0.0
 var dash_cooldown_timer: float = 0.0
 var is_dashing: bool = false
 var has_air_dashed: bool = false
-var intro_timer: float = 12.0  
+
+var jump_start_time: float = 0.0
+var is_jumping: bool = false
+var total_air_time_estimate: float = 0.0
+var jump_phase: int = 0
 
 signal input_dir_updated(new_dir: Vector2)
+signal jump_phase_changed(phase: int)
 
 func _ready():
 	astrael = $Astrael
 	camera = $CameraPivot/SpringArm3D/Camera3D
 
 func _physics_process(delta):
-	intro_timer -= delta  
-	if intro_timer > 0:
-		velocity = Vector3.ZERO 
-		return  
-	
 	var input_dir = Vector2.ZERO
 	if Input.is_action_pressed("move_forward"):
 		input_dir.y -= 1
@@ -95,9 +95,38 @@ func _physics_process(delta):
 	if Input.is_action_just_pressed("jump"):
 		if is_on_floor():
 			velocity.y = jump_speed
+			is_jumping = true
+			has_air_dashed = false
+			jump_start_time = Time.get_ticks_msec()
+			jump_phase = 0
+			jump_phase_changed.emit(jump_phase)
 			can_double_jump = true
 		elif can_double_jump:
 			velocity.y = jump_speed
+			is_jumping = true
+			jump_start_time = Time.get_ticks_msec()
+			jump_phase = 0
+			jump_phase_changed.emit(jump_phase)
 			can_double_jump = false
+
+	if not is_on_floor() and is_jumping:
+		var current_time = Time.get_ticks_msec()
+		var air_time = (current_time - jump_start_time) / 1000.0
+		
+		total_air_time_estimate = 2 * jump_speed / gravity
+		var phase_division = total_air_time_estimate / 3.0
+		
+		if air_time > phase_division * 1 and jump_phase < 1:
+			jump_phase = 1
+			jump_phase_changed.emit(jump_phase)
+		elif air_time > phase_division * 2 and jump_phase < 2:
+			jump_phase = 2
+			jump_phase_changed.emit(jump_phase)
+		
+		velocity.y -= gravity * delta
+	
+	if is_on_floor() and is_jumping:
+		is_jumping = false
+		jump_phase = 0
 
 	move_and_slide()
