@@ -11,8 +11,6 @@ var camera: Camera3D
 var orientation = Transform3D()
 var can_double_jump: bool = false
 
-
-
 signal input_dir_updated(new_dir: Vector2)
 signal jump_phase_changed(phase: int)
 
@@ -21,7 +19,7 @@ func _ready():
 	camera = $CameraPivot/SpringArm3D/Camera3D
 
 func _physics_process(delta):
-	#camera and movement
+	# Camera and movement
 	var input_dir := Input.get_vector("move_left", "move_right", "move_forward", "move_backward")
 	input_dir_updated.emit(input_dir)
 
@@ -39,20 +37,25 @@ func _physics_process(delta):
 		velocity.x = move_dir.x * current_speed
 		velocity.z = move_dir.z * current_speed
 	else:
-		velocity.x = move_toward(velocity.x, 0, current_speed)
-		velocity.z = move_toward(velocity.z, 0, current_speed)
-#jumping
-	if Input.is_action_just_pressed("jump") and is_on_floor():
-		velocity.y = jump_height
-		jump_phase_changed.emit(0)
+		velocity.x = move_toward(velocity.x, 0, current_speed * delta)
+		velocity.z = move_toward(velocity.z, 0, current_speed * delta)
 
-		can_double_jump = true
-	elif can_double_jump:
-		velocity.y = jump_height
-		jump_phase_changed.emit(0)
-		can_double_jump = false
-	velocity.y -= gravity * delta
+	# Jumping logic
+	if Input.is_action_just_pressed("jump"):
+		if is_on_floor():
+			velocity.y = jump_height
+			jump_phase_changed.emit(0)
+			can_double_jump = true
+		elif can_double_jump:
+			velocity.y = jump_height
+			jump_phase_changed.emit(0)
+			can_double_jump = false
+
+	# Apply gravity
+	if not is_on_floor():
+		velocity.y -= gravity * delta
+
 	jump_phase_changed.emit(1)
 
-
+	# Move the character
 	move_and_slide()
