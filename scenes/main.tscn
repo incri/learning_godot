@@ -40,5 +40,5 @@ mesh = SubResource("PlaneMesh_sgp6g")
 shape = SubResource("ConcavePolygonShape3D_o5qli")
 
 [node name="Player" parent="." instance=ExtResource("1_o5qli")]
-transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, -2.30558, 1.5602, 0.139096)
+transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, -2.30558, 1.6725, 0.139096)
 slide_on_ceiling = false
