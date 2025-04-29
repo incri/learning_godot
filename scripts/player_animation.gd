@@ -7,7 +7,7 @@ extends Node3D
 @export var fallingBlendPath: String
 @export var locolandBlendPath: String
 
-@export var player_movements: Node  
+@export var player_movements: CharacterBody3D  
 
 var input_dir = Vector2.ZERO
 var current_blend: float = 0.0
