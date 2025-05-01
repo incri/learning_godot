@@ -8,7 +8,8 @@ extends CharacterBody3D
 
 @export var animationTree: AnimationTree
 @export var locomotionBlendPath: String = "parameters/locomotion/blend_position"
-@export var locojumpBlendPath: String
+@export var locojumpBlendPath: String = "parameters/loco_jump/blend_amount"
+@export var jumpToFallBlendPath: String = "parameters/jump_to_fall_motion/blend_position"
 @export var fallingBlendPath: String
 @export var locolandBlendPath: String
 
@@ -19,12 +20,16 @@ var can_double_jump: bool = false
 var movement_speed: float
 
 var target_blend: float = 0.0
-var movement_blend_speed: float = 2.0
+var movement_blend_speed: float = 3.0
 var current_blend: float = 0.0
 
-
-signal input_dir_updated(new_dir: Vector2)
-signal jump_phase_changed(phase: int)
+var target_locojump_blend: float = 0.0
+var jump_blend_speed: float = 2.0
+var locojump_blend: float = 0.0
+var target_jump_to_fall_blend: float = 0.0
+var jump_to_fall_speed: float = 2.0
+var jump_to_fall_blend: float = 0.0
+var was_in_air: bool
 
 func _ready():
 	astrael = $Astrael
@@ -34,7 +39,6 @@ func _ready():
 func _physics_process(delta):
 	# 1. Get input direction (left/right + forward/backward)
 	var input_dir := Input.get_vector("move_left", "move_right", "move_forward", "move_backward")
-	input_dir_updated.emit(input_dir)
 
 	# 2. Get camera rotation for camera-relative movement
 	var cam_rot = camera.global_transform.basis.get_euler()
@@ -46,7 +50,7 @@ func _physics_process(delta):
 		target_blend = 1.0  # Sprint animation
 	elif input_dir.length_squared() > 0:
 		movement_speed = run_speed
-		target_blend = 0.5  # Walk or run animation
+		target_blend = -1.0  # Walk or run animation
 	else:
 		movement_speed = 0
 		target_blend = 0.0  # Idle animation
@@ -64,32 +68,49 @@ func _physics_process(delta):
 		velocity.z = move_toward(velocity.z, 0, run_speed * delta)
 
 	# 5. Smooth animation blend transition
-	print("current_blend:", current_blend)
-	print("AnimationTree active:", animationTree.active)
-	print("Blend path:", locomotionBlendPath)
+
 
 	current_blend = lerp(current_blend, target_blend, movement_blend_speed * delta)
 	animationTree.set(locomotionBlendPath, current_blend)
 
-
-
-
-	# Jumping logic
+# Jumping logic
 	if Input.is_action_just_pressed("jump"):
 		if is_on_floor():
 			velocity.y = jump_height
-			jump_phase_changed.emit(0)
 			can_double_jump = true
+
 		elif can_double_jump:
 			velocity.y = jump_height
-			jump_phase_changed.emit(0)
 			can_double_jump = false
+			
+	target_locojump_blend = 1.0
 
-	# Apply gravity
+
+	# Trigger jump animation blend
+
+	# Interpolate jump animation blend (smooth start of jump animation)
+
+
+# Gravity + transition to fall animation
 	if not is_on_floor():
 		velocity.y -= gravity * delta
 
-	jump_phase_changed.emit(1)
+	# Start blending to fall
+		target_jump_to_fall_blend = 1.0
+		was_in_air = true
+	else:
+		# Just landed — reset blends
+		target_locojump_blend = 0.0
+		locojump_blend = 0.0
+		target_jump_to_fall_blend = 0.0
+		jump_to_fall_blend = 0.0
+		was_in_air = false
+		
+	locojump_blend = lerp(locojump_blend, target_locojump_blend, jump_blend_speed * delta)
+	animationTree.set(locojumpBlendPath, locojump_blend)
+	jump_to_fall_blend = lerp(jump_to_fall_blend, target_jump_to_fall_blend, jump_to_fall_speed * delta)
+	animationTree.set(jumpToFallBlendPath, jump_to_fall_blend)
+
 
 	# Move the character
 	move_and_slide()

@@ -42,12 +42,3 @@ shape = SubResource("ConcavePolygonShape3D_o5qli")
 [node name="Player" parent="." instance=ExtResource("1_o5qli")]
 transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, -2.30558, 1.6725, 0.139096)
 slide_on_ceiling = false
-turn_speed = 4.0
-run_speed = 4.0
-jump_height = 6.0
-sprint_speed = 8.0
-gravity = 9.8
-locomotionBlendPath = "parameters/locomotion/blend_position"
-locojumpBlendPath = ""
-fallingBlendPath = ""
-locolandBlendPath = ""
