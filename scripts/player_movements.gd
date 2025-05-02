@@ -4,16 +4,16 @@ extends CharacterBody3D
 @export var jump_height: float = 6.0
 @export var sprint_speed: float = 8.0
 @export var gravity: float = 9.8
-@export var dash_speed: float = 15.0  # Speed during dash
-@export var dash_duration: float = 0.2  # How long the dash lasts in seconds
-@export var dash_cooldown: float = 1.0  # Time between dashes
+@export var dash_speed: float = 8.0
+@export var dash_duration: float = 0.2
+@export var dash_cooldown: float = 1.0
 @export var animationTree: AnimationTree
 @export var locomotionBlendPath: String = "parameters/locomotion/blend_position"
 @export var locojumpBlendPath: String = "parameters/loco_jump/blend_amount"
 @export var jumpToFallBlendPath: String = "parameters/jump_to_fall_motion/blend_position"
 @export var fallingBlendPath: String
 @export var locolandBlendPath: String
-@export var dashBlendPath: String = "parameters/dash/blend_amount"  # Path for dash animation blend
+@export var dashBlendPath: String = "parameters/dash/blend_amount"
 
 var astrael: Node3D
 var camera: Camera3D
