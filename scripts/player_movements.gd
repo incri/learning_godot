@@ -1,12 +1,12 @@
 extends CharacterBody3D
-@export var turn_speed: float = 4.0
-@export var run_speed: float = 4.0
-@export var jump_height: float = 6.0
-@export var sprint_speed: float = 8.0
+@export var turn_speed: float = 2.0
+@export var run_speed: float = 3.0
+@export var jump_height: float = 4.0
+@export var sprint_speed: float = 5.0
 @export var gravity: float = 9.8
-@export var dash_speed: float = 8.0
-@export var dash_duration: float = 0.2
-@export var dash_cooldown: float = 1.0
+@export var dash_speed: float = 4.0
+@export var dash_duration: float = 0.4
+@export var dash_cooldown: float = 2.0
 @export var animationTree: AnimationTree
 @export var locomotionBlendPath: String = "parameters/locomotion/blend_position"
 @export var locojumpBlendPath: String = "parameters/loco_jump/blend_amount"
