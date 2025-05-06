@@ -9,6 +9,12 @@ render_mode blend_mix,depth_draw_opaque,cull_back,diffuse_burley,specular_schlic
 #define VERTEX_PASS 1
 #define FRAGMENT_PASS 2
 
+#if CURRENT_RENDERER == RENDERER_COMPATIBILITY
+    #define fma(a, b, c) ((a) * (b) + (c))
+    #define dFdxCoarse(a) dFdx(a)
+    #define dFdyCoarse(a) dFdy(a)
+#endif
+
 // Private uniforms
 // Commented uniforms aren't needed for this shader, but are available for your own needs.
 uniform vec3 _camera_pos = vec3(0.f);
@@ -26,7 +32,7 @@ uniform vec2 _region_locations[1024];
 //uniform float _texture_detile_array[32];
 //uniform vec4 _texture_color_array[32];
 uniform highp sampler2DArray _height_maps : repeat_disable;
-uniform highp usampler2DArray _control_maps : repeat_disable;
+uniform highp sampler2DArray _control_maps : repeat_disable;
 //uniform highp sampler2DArray _color_maps : source_color, filter_linear_mipmap_anisotropic, repeat_disable;
 //uniform highp sampler2DArray _texture_array_albedo : source_color, filter_linear_mipmap_anisotropic, repeat_enable;
 //uniform highp sampler2DArray _texture_array_normal : hint_normal, filter_linear_mipmap_anisotropic, repeat_enable;
@@ -92,7 +98,7 @@ void vertex() {
 
 	// Discard vertices for Holes. 1 lookup
 	ivec3 v_region = get_index_coord(start_pos, VERTEX_PASS);
-	uint control = texelFetch(_control_maps, v_region, 0).r;
+	uint control = floatBitsToUint(texelFetch(_control_maps, v_region, 0)).r;
 	bool hole = bool(control >>2u & 0x1u);
 
 	// Show holes to all cameras except mouse camera (on exactly 1 layer)
