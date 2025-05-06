@@ -14,6 +14,12 @@ render_mode blend_mix,depth_draw_opaque,cull_back,diffuse_burley,specular_schlic
 #define VERTEX_PASS 1
 #define FRAGMENT_PASS 2
 
+#if CURRENT_RENDERER == RENDERER_COMPATIBILITY
+    #define fma(a, b, c) ((a) * (b) + (c))
+    #define dFdxCoarse(a) dFdx(a)
+    #define dFdyCoarse(a) dFdy(a)
+#endif
+
 // Private uniforms
 uniform vec3 _camera_pos = vec3(0.f);
 uniform float _mesh_size = 48.f;
@@ -32,7 +38,7 @@ uniform float _texture_roughness_mod_array[32];
 uniform float _texture_uv_scale_array[32];
 uniform vec4 _texture_color_array[32];
 uniform highp sampler2DArray _height_maps : repeat_disable;
-uniform highp usampler2DArray _control_maps : repeat_disable;
+uniform highp sampler2DArray _control_maps : repeat_disable;
 uniform highp sampler2DArray _color_maps : source_color, filter_linear_mipmap, repeat_disable;
 uniform highp sampler2DArray _texture_array_albedo : source_color, filter_linear_mipmap, repeat_enable;
 uniform highp sampler2DArray _texture_array_normal : hint_normal, filter_linear_mipmap, repeat_enable;
@@ -140,10 +146,10 @@ void vertex() {
 	indexUV[3] = get_index_coord(start_pos + offsets.xx, VERTEX_PASS);
 	// Mask off Scale/Rotation/Navigation bits to 0, as they are not used.
 	#define CONTROL_MASK 0xFFFFC07Du
-	v_control[0] = texelFetch(_control_maps, indexUV[0], 0).r & CONTROL_MASK;
-	v_control[1] = texelFetch(_control_maps, indexUV[1], 0).r & CONTROL_MASK;
-	v_control[2] = texelFetch(_control_maps, indexUV[2], 0).r & CONTROL_MASK;
-	v_control[3] = texelFetch(_control_maps, indexUV[3], 0).r & CONTROL_MASK;
+	v_control[0] = floatBitsToUint(texelFetch(_control_maps, indexUV[0], 0)).r & CONTROL_MASK;
+	v_control[1] = floatBitsToUint(texelFetch(_control_maps, indexUV[1], 0)).r & CONTROL_MASK;
+	v_control[2] = floatBitsToUint(texelFetch(_control_maps, indexUV[2], 0)).r & CONTROL_MASK;
+	v_control[3] = floatBitsToUint(texelFetch(_control_maps, indexUV[3], 0)).r & CONTROL_MASK;
 	bool full_auto = !bool((v_control[0] & v_control[1] & v_control[2] & v_control[3]) & 0x1u);
 	bool identical = !(
 			(v_control[0] == v_control[1]) &&
@@ -325,7 +331,7 @@ void fragment() {
 	vec4 color_map = region_uv.z > -1.0 ? textureLod(_color_maps, region_uv, region_mip) : COLOR_MAP;
 	
 	Material mat[4];
-	uint control = texelFetch(_control_maps, get_index_coord(floor(uv), FRAGMENT_PASS), 0).r;
+	uint control = floatBitsToUint(texelFetch(_control_maps, get_index_coord(floor(uv), FRAGMENT_PASS), 0)).r;
 	get_material(base_derivatives, control, region_uv, mat[3]);
 
 	vec4 albedo_height = mat[3].alb_ht;

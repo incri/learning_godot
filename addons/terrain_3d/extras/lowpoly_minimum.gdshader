@@ -10,6 +10,12 @@ render_mode blend_mix,depth_draw_opaque,cull_back,diffuse_burley,specular_schlic
 #define VERTEX_PASS 1
 #define FRAGMENT_PASS 2
 
+#if CURRENT_RENDERER == RENDERER_COMPATIBILITY
+    #define fma(a, b, c) ((a) * (b) + (c))
+    #define dFdxCoarse(a) dFdx(a)
+    #define dFdyCoarse(a) dFdy(a)
+#endif
+
 // Private uniforms
 uniform vec3 _camera_pos = vec3(0.f);
 uniform float _mesh_size = 48.f;
@@ -23,7 +29,7 @@ uniform int _region_map_size = 32;
 uniform int _region_map[1024];
 uniform vec2 _region_locations[1024];
 uniform highp sampler2DArray _height_maps : repeat_disable;
-uniform highp usampler2DArray _control_maps : repeat_disable;
+uniform highp sampler2DArray _control_maps : repeat_disable;
 
 // Varyings & Types
 // Some are required for editor functions
@@ -86,7 +92,7 @@ void vertex() {
 
 	// Discard vertices for Holes. 1 lookup
 	ivec3 region = get_index_coord(start_pos, VERTEX_PASS);
-	uint control = texelFetch(_control_maps, region, 0).r;
+	uint control = floatBitsToUint(texelFetch(_control_maps, region, 0)).r;
 	bool hole = bool(control >>2u & 0x1u);
 
 	// Show holes to all cameras except mouse camera (on exactly 1 layer)
