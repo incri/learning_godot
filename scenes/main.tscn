@@ -1,13 +1,9 @@
-[gd_scene load_steps=5 format=3 uid="uid://cqr8d6pehppns"]
+[gd_scene load_steps=4 format=3 uid="uid://cqr8d6pehppns"]
 
-[ext_resource type="Texture2D" uid="uid://bkstrynjcue4p" path="res://assets/levels/dry-cracked-ground-texture.jpg" id="1_0wfyh"]
 [ext_resource type="PackedScene" uid="uid://bdv1vc1vfu8fr" path="res://scenes/player.tscn" id="1_o5qli"]
+[ext_resource type="PackedScene" uid="uid://cqa5o8cwhuxtr" path="res://levels/Hometown.tscn" id="2_0wfyh"]
 
 [sub_resource type="Environment" id="Environment_sugp2"]
-
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_jyhfs"]
-albedo_texture = ExtResource("1_0wfyh")
-uv1_triplanar = true
 
 [node name="Main" type="Node3D"]
 
@@ -15,14 +11,10 @@ uv1_triplanar = true
 environment = SubResource("Environment_sugp2")
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
-transform = Transform3D(-0.866025, -0.433013, 0.25, 0, 0.5, 0.866025, -0.5, 0.75, -0.433013, -0.0381212, 16.427, -15.2385)
+transform = Transform3D(-0.866025, -0.433013, 0.25, 0, 0.5, 0.866025, -0.5, 0.75, -0.433013, 351.368, 153.391, 83.9744)
 shadow_enabled = true
 
-[node name="CSGBox3D" type="CSGBox3D" parent="."]
-use_collision = true
-size = Vector3(100, 1, 100)
-material = SubResource("StandardMaterial3D_jyhfs")
+[node name="Hometown" parent="." instance=ExtResource("2_0wfyh")]
 
 [node name="Player" parent="." instance=ExtResource("1_o5qli")]
-transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, -2.30558, 1.6725, 0.139096)
-slide_on_ceiling = false
+transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, -12.2241, 77.7155, 0)

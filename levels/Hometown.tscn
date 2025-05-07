@@ -1,14 +1,15 @@
-[gd_scene load_steps=13 format=3 uid="uid://l17aksycxf5v"]
+[gd_scene load_steps=14 format=3 uid="uid://cqa5o8cwhuxtr"]
 
-[ext_resource type="Texture2D" uid="uid://b5nbutrru8grt" path="res://assets/terrains/terrain/textures/rocky_terrain_03_diff_2k.png" id="1_wantu"]
-[ext_resource type="Texture2D" uid="uid://1upljgahf78y" path="res://assets/terrains/terrain/textures/rocky_terrain_03_nor_gl_2k.png" id="2_trfus"]
-[ext_resource type="Texture2D" uid="uid://dj3djavhfspnn" path="res://assets/terrains/terrain/textures/rocky_terrain_03_disp_2k.png" id="3_ihsnq"]
+[ext_resource type="Texture2D" uid="uid://yjs0roucmkcs" path="res://assets/rocky_terrain_02_2k/textures/rocky_terrain_02_diff_2k.png" id="1_trfus"]
+[ext_resource type="Texture2D" uid="uid://cq3n7r7rmoumy" path="res://assets/rocky_terrain_02_2k/textures/rocky_terrain_02_nor_gl_2k.png" id="2_ihsnq"]
+[ext_resource type="Texture2D" uid="uid://fnphqy42kxiq" path="res://assets/rock_face_03_2k/textures/rock_face_03_diff_2k.png" id="3_q6yek"]
+[ext_resource type="Texture2D" uid="uid://con6dj0wcum6i" path="res://assets/rock_face_03_2k/textures/rock_face_03_nor_gl_2k.png" id="4_nk7nm"]
 
-[sub_resource type="Gradient" id="Gradient_q6yek"]
+[sub_resource type="Gradient" id="Gradient_bpl23"]
 offsets = PackedFloat32Array(0.2, 1)
 colors = PackedColorArray(1, 1, 1, 1, 0, 0, 0, 1)
 
-[sub_resource type="FastNoiseLite" id="FastNoiseLite_nk7nm"]
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_wantu"]
 noise_type = 2
 frequency = 0.03
 cellular_jitter = 3.0
@@ -20,12 +21,12 @@ domain_warp_fractal_type = 2
 domain_warp_fractal_lacunarity = 1.5
 domain_warp_fractal_gain = 1.0
 
-[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_q78rf"]
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_trfus"]
 seamless = true
-color_ramp = SubResource("Gradient_q6yek")
-noise = SubResource("FastNoiseLite_nk7nm")
+color_ramp = SubResource("Gradient_bpl23")
+noise = SubResource("FastNoiseLite_wantu")
 
-[sub_resource type="Terrain3DMaterial" id="Terrain3DMaterial_hfdec"]
+[sub_resource type="Terrain3DMaterial" id="Terrain3DMaterial_ihsnq"]
 _shader_parameters = {
 &"bias_distance": 512.0,
 &"blend_sharpness": 0.87,
@@ -42,13 +43,13 @@ _shader_parameters = {
 &"noise1_scale": 0.04,
 &"noise2_scale": 0.076,
 &"noise3_scale": 0.225,
-&"noise_texture": SubResource("NoiseTexture2D_q78rf"),
+&"noise_texture": SubResource("NoiseTexture2D_trfus"),
 &"projection_angular_division": 2.0,
 &"projection_threshold": 0.8,
 &"world_space_normal_blend": true
 }
 
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_eu32p"]
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_q6yek"]
 transparency = 4
 cull_mode = 2
 vertex_color_use_as_albedo = true
@@ -58,33 +59,34 @@ distance_fade_mode = 1
 distance_fade_min_distance = 128.0
 distance_fade_max_distance = 96.0
 
-[sub_resource type="Terrain3DMeshAsset" id="Terrain3DMeshAsset_l0ke7"]
+[sub_resource type="Terrain3DMeshAsset" id="Terrain3DMeshAsset_nk7nm"]
 generated_type = 1
 height_offset = 0.5
-material_override = SubResource("StandardMaterial3D_eu32p")
+material_override = SubResource("StandardMaterial3D_q6yek")
 last_lod = 0
 last_shadow_lod = 0
 lod0_range = 128.0
 
-[sub_resource type="Terrain3DTextureAsset" id="Terrain3DTextureAsset_5kogy"]
-name = "rocky_terrain_03_diff_2k"
-albedo_texture = ExtResource("1_wantu")
-normal_texture = ExtResource("2_trfus")
+[sub_resource type="Terrain3DTextureAsset" id="Terrain3DTextureAsset_q78rf"]
+name = "rocky_terrain_02_diff_2k"
+albedo_texture = ExtResource("1_trfus")
+normal_texture = ExtResource("2_ihsnq")
 
-[sub_resource type="Terrain3DTextureAsset" id="Terrain3DTextureAsset_l0vat"]
-name = "rocky_terrain_03_disp_2k"
+[sub_resource type="Terrain3DTextureAsset" id="Terrain3DTextureAsset_trfus"]
+name = "rock_face_03_diff_2k"
 id = 1
-albedo_texture = ExtResource("3_ihsnq")
-normal_texture = ExtResource("2_trfus")
+albedo_texture = ExtResource("3_q6yek")
+normal_texture = ExtResource("4_nk7nm")
 
-[sub_resource type="Terrain3DAssets" id="Terrain3DAssets_ud70t"]
-mesh_list = Array[Terrain3DMeshAsset]([SubResource("Terrain3DMeshAsset_l0ke7")])
-texture_list = Array[Terrain3DTextureAsset]([SubResource("Terrain3DTextureAsset_5kogy"), SubResource("Terrain3DTextureAsset_l0vat")])
+[sub_resource type="Terrain3DAssets" id="Terrain3DAssets_hfdec"]
+mesh_list = Array[Terrain3DMeshAsset]([SubResource("Terrain3DMeshAsset_nk7nm")])
+texture_list = Array[Terrain3DTextureAsset]([SubResource("Terrain3DTextureAsset_q78rf"), SubResource("Terrain3DTextureAsset_trfus")])
 
 [node name="Hometown" type="Node3D"]
 
 [node name="Terrain3D" type="Terrain3D" parent="."]
-data_directory = "res://assets/terrains"
-material = SubResource("Terrain3DMaterial_hfdec")
-assets = SubResource("Terrain3DAssets_ud70t")
+data_directory = "res://terrains"
+material = SubResource("Terrain3DMaterial_ihsnq")
+assets = SubResource("Terrain3DAssets_hfdec")
 top_level = true
+metadata/_edit_lock_ = true
