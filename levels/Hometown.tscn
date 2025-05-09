@@ -1,9 +1,12 @@
-[gd_scene load_steps=14 format=3 uid="uid://cqa5o8cwhuxtr"]
+[gd_scene load_steps=18 format=3 uid="uid://coxh7g0x8kuqr"]
 
 [ext_resource type="Texture2D" uid="uid://yjs0roucmkcs" path="res://assets/rocky_terrain_02_2k/textures/rocky_terrain_02_diff_2k.png" id="1_trfus"]
 [ext_resource type="Texture2D" uid="uid://cq3n7r7rmoumy" path="res://assets/rocky_terrain_02_2k/textures/rocky_terrain_02_nor_gl_2k.png" id="2_ihsnq"]
 [ext_resource type="Texture2D" uid="uid://fnphqy42kxiq" path="res://assets/rock_face_03_2k/textures/rock_face_03_diff_2k.png" id="3_q6yek"]
 [ext_resource type="Texture2D" uid="uid://con6dj0wcum6i" path="res://assets/rock_face_03_2k/textures/rock_face_03_nor_gl_2k.png" id="4_nk7nm"]
+[ext_resource type="Texture2D" uid="uid://bv6txnidlgsdo" path="res://assets/coast_sand_01_2k/textures/coast_sand_01_diff_2k.png" id="5_q6yek"]
+[ext_resource type="Texture2D" uid="uid://c2ghrg7bnn7wx" path="res://assets/coast_sand_01_2k/textures/coast_sand_01_nor_gl_2k.png" id="6_nk7nm"]
+[ext_resource type="PackedScene" uid="uid://c46xwrqwv4tyo" path="res://assets/build2.fbx" id="7_nk7nm"]
 
 [sub_resource type="Gradient" id="Gradient_bpl23"]
 offsets = PackedFloat32Array(0.2, 1)
@@ -78,9 +81,15 @@ id = 1
 albedo_texture = ExtResource("3_q6yek")
 normal_texture = ExtResource("4_nk7nm")
 
+[sub_resource type="Terrain3DTextureAsset" id="Terrain3DTextureAsset_hfdec"]
+name = "coast_sand_01_diff_2k"
+id = 2
+albedo_texture = ExtResource("5_q6yek")
+normal_texture = ExtResource("6_nk7nm")
+
 [sub_resource type="Terrain3DAssets" id="Terrain3DAssets_hfdec"]
 mesh_list = Array[Terrain3DMeshAsset]([SubResource("Terrain3DMeshAsset_nk7nm")])
-texture_list = Array[Terrain3DTextureAsset]([SubResource("Terrain3DTextureAsset_q78rf"), SubResource("Terrain3DTextureAsset_trfus")])
+texture_list = Array[Terrain3DTextureAsset]([SubResource("Terrain3DTextureAsset_q78rf"), SubResource("Terrain3DTextureAsset_trfus"), SubResource("Terrain3DTextureAsset_hfdec")])
 
 [node name="Hometown" type="Node3D"]
 
@@ -90,3 +99,7 @@ material = SubResource("Terrain3DMaterial_ihsnq")
 assets = SubResource("Terrain3DAssets_hfdec")
 top_level = true
 metadata/_edit_lock_ = true
+
+[node name="build2" parent="Terrain3D" instance=ExtResource("7_nk7nm")]
+physics_interpolation_mode = 1
+transform = Transform3D(0.156883, 0, -0.987617, 0, 1, 0, 0.987617, 0, 0.156883, 61.7964, 22.1997, -24.1232)
