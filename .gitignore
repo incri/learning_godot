@@ -6,6 +6,7 @@
 export.cfg
 export_credentials.cfg
 assets/
+/terrains
 
 # Imported translations (automatically generated from CSV files)
 *.translation
