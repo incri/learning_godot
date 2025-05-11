@@ -7,14 +7,22 @@
 
 [node name="Main" type="Node3D"]
 
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+transform = Transform3D(0.411515, 0.583398, -0.700216, 0, 0.768284, 0.64011, 0.911403, -0.263414, 0.31616, 0, 0, 0)
+light_energy = 2.55
+shadow_enabled = true
+directional_shadow_max_distance = 1.0
+
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
 environment = SubResource("Environment_sgp6g")
 
-[node name="DirectionalLight3D" type="DirectionalLight3D" parent="WorldEnvironment"]
-transform = Transform3D(-0.809517, -0.582413, -0.074013, -0.307701, 0.313522, 0.898345, -0.500003, 0.749999, -0.43301, -503.872, 741.562, -526.151)
-shadow_enabled = true
-
 [node name="Hometown" parent="WorldEnvironment" instance=ExtResource("2_0wfyh")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.09274, 15.4985, 0)
+
+[node name="house" parent="WorldEnvironment/Hometown" index="1"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 97.8269, 4.95679, 0)
 
 [node name="Player" parent="." instance=ExtResource("1_o5qli")]
-transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 77.7349, 49.7936, -0.194885)
+transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 87.7697, 30.6198, -36.4705)
+
+[editable path="WorldEnvironment/Hometown"]
