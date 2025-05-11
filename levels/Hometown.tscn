@@ -6,7 +6,7 @@
 [ext_resource type="Texture2D" uid="uid://con6dj0wcum6i" path="res://assets/rock_face_03_2k/textures/rock_face_03_nor_gl_2k.png" id="4_nk7nm"]
 [ext_resource type="Texture2D" uid="uid://bv6txnidlgsdo" path="res://assets/coast_sand_01_2k/textures/coast_sand_01_diff_2k.png" id="5_q6yek"]
 [ext_resource type="Texture2D" uid="uid://c2ghrg7bnn7wx" path="res://assets/coast_sand_01_2k/textures/coast_sand_01_nor_gl_2k.png" id="6_nk7nm"]
-[ext_resource type="PackedScene" uid="uid://c46xwrqwv4tyo" path="res://assets/build2.fbx" id="7_nk7nm"]
+[ext_resource type="PackedScene" uid="uid://on3lf8jyrcbn" path="res://assets/boundries.fbx" id="7_nk7nm"]
 
 [sub_resource type="Gradient" id="Gradient_bpl23"]
 offsets = PackedFloat32Array(0.2, 1)
@@ -100,6 +100,5 @@ assets = SubResource("Terrain3DAssets_hfdec")
 top_level = true
 metadata/_edit_lock_ = true
 
-[node name="build2" parent="Terrain3D" instance=ExtResource("7_nk7nm")]
-physics_interpolation_mode = 1
-transform = Transform3D(0.156883, 0, -0.987617, 0, 1, 0, 0.987617, 0, 0.156883, 61.7964, 22.1997, -24.1232)
+[node name="boundries" parent="Terrain3D" instance=ExtResource("7_nk7nm")]
+transform = Transform3D(-0.147965, 0, 0.988993, 0, 1, 0, -0.988993, 0, -0.147965, 183.062, 20.2113, 169.569)
